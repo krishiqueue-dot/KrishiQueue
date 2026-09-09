@@ -1,0 +1,359 @@
+@import "tailwindcss";
+
+/* ============================================================
+   KRISHIQUEUE DESIGN SYSTEM
+   Indian agriculture x digital public service x real-time tech
+   ============================================================ */
+
+@theme {
+  /* ---- Ink: deep institutional navy (primary dark surface) ---- */
+  --color-ink-950: #07141f;
+  --color-ink-900: #0b1b2b;
+  --color-ink-800: #12293d;
+  --color-ink-700: #1b3a54;
+  --color-ink-600: #2a4d6a;
+  --color-ink-500: #3d6f92;
+
+  /* ---- Government blue ---- */
+  --color-blue-700: #0f3f66;
+  --color-blue-600: #14507e;
+  --color-blue-500: #1c6aa3;
+  --color-blue-400: #4a8cbd;
+  --color-blue-100: #dce9f3;
+  --color-blue-50: #eef4f9;
+
+  /* ---- Agricultural green ---- */
+  --color-agri-800: #0f5233;
+  --color-agri-700: #166a44;
+  --color-agri-600: #1e8355;
+  --color-agri-500: #2a9d68;
+  --color-agri-400: #57b98a;
+  --color-agri-100: #d7ede0;
+  --color-agri-50: #ecf6f0;
+
+  /* ---- Saffron accent (used sparingly) ---- */
+  --color-saffron-700: #a85c12;
+  --color-saffron-600: #c9701a;
+  --color-saffron-500: #e08a2b;
+  --color-saffron-400: #f0a63f;
+  --color-saffron-100: #faebd8;
+  --color-saffron-50: #fdf6ec;
+
+  /* ---- Alert / high congestion ---- */
+  --color-clay-600: #a8382f;
+  --color-clay-500: #c2453c;
+  --color-clay-100: #f7dedb;
+
+  /* ---- Paper ---- */
+  --color-ivory-50: #fdfbf7;
+  --color-ivory-100: #faf7f1;
+  --color-ivory-200: #f3eee4;
+  --color-ivory-300: #e8e0d1;
+
+  /* ---- Type ---- */
+  --font-display: "Fraunces", "Noto Sans Devanagari", "Noto Sans Telugu", ui-serif, Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", "Noto Sans Devanagari", "Noto Sans Telugu",
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  /* ---- Motion ---- */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+
+@layer base {
+  * {
+    border-color: color-mix(in srgb, var(--color-ink-900) 10%, transparent);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-ivory-100);
+    color: var(--color-ink-900);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv02", "cv03", "cv04", "ss01";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background-color: var(--color-saffron-100);
+    color: var(--color-ink-900);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-blue-500);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  p { text-wrap: pretty; }
+}
+
+/* ============================================================
+   TEXTURE + SURFACE UTILITIES
+   ============================================================ */
+
+@layer utilities {
+  /* Fine paper grain — keeps large flat areas from looking synthetic */
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.28;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.42'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+  }
+
+  /* Ploughed-field furrow lines — the signature KrishiQueue backdrop */
+  .furrows {
+    background-image: repeating-linear-gradient(
+      to right,
+      color-mix(in srgb, currentColor 7%, transparent) 0 1px,
+      transparent 1px 34px
+    );
+  }
+
+  .furrows-dense {
+    background-image: repeating-linear-gradient(
+      to right,
+      color-mix(in srgb, currentColor 6%, transparent) 0 1px,
+      transparent 1px 14px
+    );
+  }
+
+  /* Survey grid — the "digital clarity" counterpart to furrows */
+  .survey-grid {
+    background-image:
+      linear-gradient(color-mix(in srgb, currentColor 6%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, currentColor 6%, transparent) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  .display-1 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+  }
+
+  /* Hairline dividers that read as measurement ticks */
+  .tick-rule {
+    background-image: repeating-linear-gradient(
+      to right,
+      currentColor 0 1px,
+      transparent 1px 8px
+    );
+    opacity: 0.25;
+  }
+
+  .shadow-lift {
+    box-shadow:
+      0 1px 2px rgba(11, 27, 43, 0.04),
+      0 8px 24px -12px rgba(11, 27, 43, 0.18);
+  }
+
+  .shadow-lift-lg {
+    box-shadow:
+      0 1px 2px rgba(11, 27, 43, 0.05),
+      0 24px 60px -24px rgba(11, 27, 43, 0.3);
+  }
+
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { scrollbar-width: none; }
+}
+
+/* ============================================================
+   MOTION KEYFRAMES
+   ============================================================ */
+
+@keyframes kq-pulse-ring {
+  0% { transform: scale(0.8); opacity: 0.8; }
+  70% { transform: scale(2.2); opacity: 0; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+@keyframes kq-sweep {
+  0% { transform: translateX(-110%); }
+  100% { transform: translateX(210%); }
+}
+
+@keyframes kq-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+.animate-pulse-ring { animation: kq-pulse-ring 2.4s var(--ease-out-soft) infinite; }
+.animate-sweep { animation: kq-sweep 2.6s var(--ease-in-out-soft) infinite; }
+.animate-blink { animation: kq-blink 1.8s ease-in-out infinite; }
+
+/* ============================================================
+   REDUCED MOTION — respected globally
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    /* Delays must collapse too, or a staggered reveal simply appears late
+       instead of appearing at once. */
+    animation-delay: 0.001ms !important;
+    transition-delay: 0.001ms !important;
+  }
+}
+
+/* ============================================================
+   STORYBOARD ANIMATIONS
+   The film runs on CSS rather than JS so a throttled or
+   backgrounded tab can never leave a frame half-drawn.
+   ============================================================ */
+
+@keyframes kq-fade-in {
+  from { opacity: 0; }
+  to   { opacity: var(--kq-op, 1); }
+}
+
+@keyframes kq-rise-in {
+  from { opacity: 0; transform: translateY(26px); }
+  to   { opacity: var(--kq-op, 1); transform: translateY(0); }
+}
+
+@keyframes kq-slide-in {
+  from { opacity: 0; transform: translateX(-14px); }
+  to   { opacity: var(--kq-op, 1); transform: translateX(0); }
+}
+
+@keyframes kq-settle {
+  from { opacity: 0.45; transform: translate(var(--kq-dx, 0px), var(--kq-dy, 0px)); }
+  to   { opacity: 1; transform: translate(0, 0); }
+}
+
+@keyframes kq-twinkle {
+  0%, 100% { opacity: 0.22; }
+  50%      { opacity: 0.9; }
+}
+
+@keyframes kq-breathe {
+  0%, 100% { opacity: 0.5; }
+  50%      { opacity: 0.85; }
+}
+
+@keyframes kq-roll {
+  from { transform: translateX(-280px); }
+  to   { transform: translateX(140px); }
+}
+
+@keyframes kq-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes kq-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-3px); }
+}
+
+@keyframes kq-ask {
+  0%   { opacity: 0; transform: translateY(18px); }
+  40%  { opacity: 0.6; }
+  100% { opacity: 0; transform: translateY(-34px); }
+}
+
+@keyframes kq-grow-x {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+.kq-fade   { animation: kq-fade-in 700ms var(--ease-out-soft) both; }
+.kq-rise   { animation: kq-rise-in 800ms var(--ease-out-soft) both; }
+.kq-slide  { animation: kq-slide-in 550ms var(--ease-out-soft) both; }
+.kq-settle { animation: kq-settle 1200ms var(--ease-out-soft) both; }
+.kq-twinkle{ animation: kq-twinkle 3.4s ease-in-out infinite; }
+.kq-breathe{ animation: kq-breathe 2.8s ease-in-out infinite; }
+.kq-roll   { animation: kq-roll 7s linear infinite; }
+.kq-spin   { animation: kq-spin 4s linear infinite; }
+.kq-spin-slow { animation: kq-spin 26s linear infinite; }
+.kq-bob    { animation: kq-bob 3.4s ease-in-out infinite; }
+.kq-ask    { animation: kq-ask 3.6s ease-in-out infinite; }
+.kq-grow-x { animation: kq-grow-x 700ms var(--ease-out-soft) both; transform-origin: left center; }
+
+/* The scene wrapper: a clean cross-fade on every cut. */
+.kq-scene { animation: kq-fade-in 520ms var(--ease-out-soft) both; }
+
+/* Under reduced motion the global damper above collapses every duration,
+   so each element lands on its final frame immediately — never mid-fade. */
+
+/* Keyed content swaps (captions, step panels). CSS rather than JS so an
+   interrupted frame can never leave the outgoing panel on screen. */
+@keyframes kq-swap-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.kq-swap { animation: kq-swap-in 380ms var(--ease-out-soft) both; }
+
+/* Edge fade telling the reader a row scrolls sideways. Applied to a
+   `relative` wrapper so it never clips the focus ring on the buttons inside. */
+.scroll-hint {
+  position: relative;
+}
+.scroll-hint::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  right: 0;
+  width: 40px;
+  pointer-events: none;
+  background: linear-gradient(to right, transparent, var(--kq-hint, transparent));
+}
+
+/* ============================================================
+   INDIC SCRIPT REFINEMENTS
+   Latin small-caps tracking is wrong for Devanagari and Telugu:
+   the extra space breaks conjuncts apart visually. Uppercase is
+   also a no-op in both scripts.
+   ============================================================ */
+
+html[lang="hi"] .font-mono.uppercase,
+html[lang="te"] .font-mono.uppercase {
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+/* Devanagari and Telugu need a little more line height than Latin. */
+html[lang="hi"] body,
+html[lang="te"] body {
+  line-height: 1.65;
+}
+
+/* Dropdown panels. CSS-driven so an interrupted frame cannot leave the
+   menu stuck half-open. */
+@keyframes kq-menu-in {
+  from { opacity: 0; transform: translateY(-6px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.kq-menu { animation: kq-menu-in 160ms var(--ease-out-soft) both; }

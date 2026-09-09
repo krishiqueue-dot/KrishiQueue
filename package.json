@@ -1,0 +1,53 @@
+{
+  "name": "krishiqueue",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "KrishiQueue — Smart Procurement. Zero Uncertainty. Interactive website prototype for Smart India Hackathon 2026, Problem Statement 26032.",
+  "keywords": [
+    "smart-india-hackathon",
+    "sih-2026",
+    "agriculture",
+    "procurement",
+    "queue-management",
+    "react",
+    "typescript",
+    "vite",
+    "prototype"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/krishiqueue-dot/KrishiQueue.git"
+  },
+  "bugs": {
+    "url": "https://github.com/krishiqueue-dot/KrishiQueue/issues"
+  },
+  "homepage": "https://github.com/krishiqueue-dot/KrishiQueue#readme",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -b --noEmit"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.23.12",
+    "lucide-react": "^0.469.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwind-merge": "^2.6.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.11",
+    "@types/node": "^26.5.0",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "tailwindcss": "^4.1.11",
+    "typescript": "^5.7.3",
+    "vite": "^6.0.7"
+  }
+}
