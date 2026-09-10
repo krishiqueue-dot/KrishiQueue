@@ -146,14 +146,9 @@ function NewWayColumn() {
         aria-hidden
         className="survey-grid pointer-events-none absolute inset-0 text-ivory-100 opacity-30"
       />
-      <div className="relative flex items-center justify-between gap-3">
-        <h3 className="font-mono text-[11px] font-semibold tracking-[0.18em] text-saffron-400 uppercase">
-          {t("solution.newWay")}
-        </h3>
-        <span className="rounded-full border border-agri-500/30 bg-agri-500/10 px-2.5 py-1 font-mono text-[9.5px] tracking-[0.14em] text-agri-400 uppercase">
-          {t("tag.prototype")}
-        </span>
-      </div>
+      <h3 className="relative font-mono text-[11px] font-semibold tracking-[0.18em] text-saffron-400 uppercase">
+        {t("solution.newWay")}
+      </h3>
 
       <ol className="relative mt-7 grid gap-1 sm:grid-cols-2 sm:gap-x-8">
         {/* solid spine: this path has a defined end */}
