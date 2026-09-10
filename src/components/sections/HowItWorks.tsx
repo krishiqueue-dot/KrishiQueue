@@ -8,6 +8,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { useState } from "react";
+import { FarmerRegistration } from "@/components/registration/FarmerRegistration";
 import { Eyebrow, Reveal } from "@/components/ui/primitives";
 import { CROPS, REGIONS, centreName, formatINR } from "@/data/india";
 import { useI18n } from "@/i18n";
@@ -110,7 +111,15 @@ export function HowItWorks() {
           </div>
         </Reveal>
 
-        {/* Detail + preview */}
+        {/* Step 01 is a working registration flow and needs the full width.
+            It stays mounted while another step is showing, so a farmer's
+            progress survives a look at step 02; `hidden` also replays the
+            entrance animation each time it comes back into view. */}
+        <div className="kq-swap mt-12" hidden={active !== 0}>
+          <FarmerRegistration />
+        </div>
+
+        {active !== 0 && (
         <div className="mt-12 grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-14">
           <div className="min-h-[9rem]">
             <div key={active} className="kq-swap">
@@ -132,6 +141,7 @@ export function HowItWorks() {
             </div>
           </div>
         </div>
+        )}
       </div>
     </section>
   );
@@ -177,34 +187,6 @@ function StepPreview({ step }: { step: number }) {
   const region = REGIONS[0];
   const centre = region.centres[0];
   const crop = CROPS[region.primaryCrop];
-
-  if (step === 0) {
-    const fields: [string, string][] = [
-      [t("common.farmer"), tl(region.farmer)],
-      [tl({ en: "Village", hi: "गाँव", te: "గ్రామం" }), tl(region.village)],
-      [tl(region.subdivisionType), tl(centre.subdivision)],
-      [t("common.district"), tl(centre.district)],
-      [t("common.state"), tl(region.state)],
-      [t("common.crop"), tl(crop.name)],
-    ];
-    return (
-      <PreviewShell label={t("how.s1.title")}>
-        <dl className="grid gap-x-6 sm:grid-cols-2">
-          {fields.map(([k, v], i) => (
-            <div
-              key={k}
-              className="kq-slide flex items-baseline justify-between gap-4 border-b border-ink-900/8 py-2.5"
-              style={{ animationDelay: `${0.06 * i}s` }}
-            >
-              <dt className="text-[12px] text-ink-700/55">{k}</dt>
-              <dd className="text-right text-[13px] font-semibold text-ink-900">{v}</dd>
-            </div>
-          ))}
-        </dl>
-        <p className="mt-4 text-[11px] text-ink-700/45">{t("disc.data")}</p>
-      </PreviewShell>
-    );
-  }
 
   if (step === 1) {
     const windows = [

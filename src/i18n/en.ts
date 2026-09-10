@@ -156,7 +156,7 @@ export const en = {
   "how.sub": "Select any step to see what the farmer sees at that moment.",
   "how.s1.title": "Register",
   "how.s1.body":
-    "The farmer registers once with their land and crop details, and their centre is mapped to their village.",
+    "The farmer registers once — profile, proof of identity, land records and bank details — and is mapped to a procurement centre near their village.",
   "how.s2.title": "Book a slot",
   "how.s2.body":
     "Available time windows are shown with real capacity, so arrivals are spread across the day instead of stacking at the gate.",
