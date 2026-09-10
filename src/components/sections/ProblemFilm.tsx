@@ -12,7 +12,14 @@ import { cn } from "@/lib/cn";
  * automatically — poster, controls and captions all keep working.
  */
 const VIDEO_SRC = "/assets/video/krishiqueue-problem.mp4";
-const POSTER_SRC = "/assets/img/film-poster.jpg";
+/**
+ * Optional still shown before playback. Left null because no frame has been
+ * exported yet — the browser then holds the film's own first frame, which is
+ * the right image anyway. Point this at a file in public/assets/img/ to
+ * override it; a path that does not resolve gives a broken poster in
+ * production, so do not set it speculatively.
+ */
+const POSTER_SRC: string | null = null;
 
 /**
  * Where each of the six scenes begins in the produced film, in seconds.
@@ -386,7 +393,7 @@ function VideoPlayer() {
         ref={ref}
         className="h-full w-full object-cover"
         src={VIDEO_SRC}
-        poster={POSTER_SRC}
+        poster={POSTER_SRC ?? undefined}
         preload="metadata"
         playsInline
         muted={muted}
