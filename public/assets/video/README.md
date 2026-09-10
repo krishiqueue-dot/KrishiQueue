@@ -1,18 +1,23 @@
-# Problem film — drop-in slot
+# Problem film
 
-The home page plays an animated storyboard by default. To swap in a produced
-film, put the encoded file here:
+`krishiqueue-problem.mp4` in this folder is the film the home page plays:
+60 seconds, 1280x720, H.264, no audio track.
 
-    public/assets/video/krishiqueue-problem.mp4
+To replace it, overwrite that file. On load the page sends a HEAD request for
+it; if the response is a `video/*` content type the player uses it, otherwise
+it falls back to the in-browser animated storyboard. Nothing else needs to
+change.
 
-and an optional poster frame here:
+An optional poster frame goes at:
 
     public/assets/img/film-poster.jpg
 
-Nothing else needs to change. On load the page sends a HEAD request for the
-MP4; if it returns a `video/*` content type the player switches from the
-storyboard to the real video, keeping the same play / pause / mute / replay
-controls, the same poster overlay and the same responsive container.
+Two settings live in `src/components/sections/ProblemFilm.tsx`:
+
+- `SCENE_STARTS` — leave `null` to split the running time evenly across the six
+  scenes, or give explicit second offsets if a re-cut is uneven.
+- `FILM_HAS_AUDIO` — `false` for the current silent cut, which hides the mute
+  control. Set it to `true` when a version with narration is dropped in.
 
 ## What the film should contain
 

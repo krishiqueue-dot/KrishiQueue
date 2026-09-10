@@ -37,7 +37,7 @@ npm run preview   # serve the production build
 | Section | What a judge can do |
 | --- | --- |
 | Hero | See a live token, queue position and estimated wait before reading a word |
-| Problem film | Play a 45-second animated storyboard of a procurement day, jump between its six scenes |
+| Problem film | Watch the 60-second film of a procurement day, jump between its six scenes |
 | Problem | Read the five distinct failures behind the problem statement, and the shape of a wasted day |
 | Solution | Compare today's undefined queue with the scheduled one |
 | How it works | Step through registration → slot → token → queue → procurement & payment |
@@ -119,14 +119,20 @@ All of it is fictional demonstration data. See `src/data/india.ts`.
 
 ## The problem film
 
-The player looks for `public/assets/video/krishiqueue-problem.mp4`. If it is
-not there — which is the case today — it plays a six-scene animated storyboard
-rendered in SVG instead. Drop the produced film into that path and the player
-switches over automatically, keeping the same controls; see
-`public/assets/video/README.md`.
+`public/assets/video/krishiqueue-problem.mp4` — a 60-second, 1280×720 H.264
+cut — is what plays. The six-scene chapter strip seeks into it, and a scene
+marker names the current beat in the corner of the frame. Scene boundaries are
+derived from the running time (even tenths of a minute); if a future edit gives
+the scenes uneven lengths, set `SCENE_STARTS` in
+`src/components/sections/ProblemFilm.tsx` and the chapters follow the new cut.
 
-The storyboard animates entirely in CSS rather than JavaScript, so a throttled
-or backgrounded tab can never leave a frame half-drawn.
+The current cut has no audio track, so the mute control is hidden — flip
+`FILM_HAS_AUDIO` in the same file when a version with sound arrives.
+
+If the video file is ever absent, the player falls back to a six-scene animated
+storyboard rendered in SVG, with the same controls. The storyboard animates in
+CSS rather than JavaScript, so a throttled or backgrounded tab cannot leave a
+frame half-drawn.
 
 ---
 

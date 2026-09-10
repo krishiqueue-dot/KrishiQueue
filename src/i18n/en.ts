@@ -75,7 +75,7 @@ export const en = {
   "hero.statCrops": "Procurement crops modelled",
 
   /* ---------- film ---------- */
-  "film.eyebrow": "The Problem, in 45 seconds",
+  "film.eyebrow": "The Problem, in 60 seconds",
   "film.title": "Before the harvest is sold, the day is already spent.",
   "film.sub":
     "A short film on what procurement day looks like today — and what it could look like tomorrow.",

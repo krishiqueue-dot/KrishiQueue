@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Pause, Play, RotateCcw, Volume2, VolumeX } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Eyebrow, Reveal } from "@/components/ui/primitives";
 import { FILM_SECONDS, FilmStage, SCENE_COUNT, SCENE_SECONDS } from "@/components/film/FilmStage";
 import { useI18n } from "@/i18n";
@@ -13,6 +13,22 @@ import { cn } from "@/lib/cn";
  */
 const VIDEO_SRC = "/assets/video/krishiqueue-problem.mp4";
 const POSTER_SRC = "/assets/img/film-poster.jpg";
+
+/**
+ * Where each of the six scenes begins in the produced film, in seconds.
+ * Leave as null to divide the running time evenly, which is correct for the
+ * current 60-second cut. Set an explicit array — e.g. [0, 9, 21, 30, 41, 52] —
+ * if a future edit gives the scenes uneven lengths, and the chapter strip and
+ * captions will follow the new cut points.
+ */
+const SCENE_STARTS: number[] | null = null;
+
+/**
+ * The current cut carries no audio track, so a mute control would invite a
+ * click that does nothing. Set this to true when a version with narration or
+ * ambient sound is dropped in and the control comes back.
+ */
+const FILM_HAS_AUDIO = false;
 
 const SCENES: { title: DictKey; caption: DictKey }[] = [
   { title: "film.scene1Title", caption: "film.scene1Cap" },
@@ -262,8 +278,27 @@ function VideoPlayer() {
   const ref = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(true);
-  const [progress, setProgress] = useState(0);
   const [started, setStarted] = useState(false);
+  const [time, setTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+
+  // The film runs the same six beats as the storyboard, so the chapter strip
+  // and captions work against it too. Scene starts are derived from the real
+  // duration rather than hard-coded, so a re-cut of a different length still
+  // lines up; SCENE_STARTS below overrides that if the edit is uneven.
+  const sceneStarts = useMemo(() => {
+    if (SCENE_STARTS) return SCENE_STARTS;
+    const each = (duration || FILM_SECONDS) / SCENE_COUNT;
+    return Array.from({ length: SCENE_COUNT }, (_, i) => i * each);
+  }, [duration]);
+
+  // The last scene whose start time has passed.
+  let scene = 0;
+  for (let i = 0; i < sceneStarts.length; i++) {
+    if (time + 0.05 >= sceneStarts[i]) scene = i;
+  }
+  const progress = duration ? Math.min(1, time / duration) : 0;
+  const ended = duration > 0 && time >= duration - 0.25;
 
   const toggle = useCallback(() => {
     const el = ref.current;
@@ -284,9 +319,27 @@ function VideoPlayer() {
     void el.play();
   }, []);
 
+  const jumpTo = useCallback(
+    (i: number) => {
+      const el = ref.current;
+      if (!el) return;
+      el.currentTime = sceneStarts[i] ?? 0;
+      setTime(sceneStarts[i] ?? 0);
+      setStarted(true);
+      void el.play();
+    },
+    [sceneStarts],
+  );
+
   return (
     <PlayerFrame
-      caption={!started ? <PosterOverlay onPlay={toggle} label={t("film.play")} /> : undefined}
+      caption={
+        started ? (
+          <SceneBadge sceneIndex={scene} />
+        ) : (
+          <PosterOverlay onPlay={toggle} label={t("film.play")} />
+        )
+      }
       controls={
         <>
           <ControlButton onClick={toggle} label={playing ? t("film.pause") : t("film.play")} primary>
@@ -295,30 +348,39 @@ function VideoPlayer() {
             ) : (
               <Play size={14} className="fill-current" />
             )}
-            {playing ? t("film.pause") : t("film.play")}
+            {playing ? t("film.pause") : ended ? t("film.replay") : t("film.play")}
           </ControlButton>
           <ControlButton onClick={replay} label={t("film.replay")}>
             <RotateCcw size={14} />
           </ControlButton>
-          <ControlButton
-            onClick={() => {
-              const el = ref.current;
-              if (!el) return;
-              el.muted = !el.muted;
-              setMuted(el.muted);
-            }}
-            label={muted ? t("film.unmute") : t("film.mute")}
-          >
-            {muted ? <VolumeX size={14} /> : <Volume2 size={14} />}
-          </ControlButton>
-          <div className="h-1 min-w-[120px] flex-1 overflow-hidden rounded-full bg-ivory-100/12">
-            <div
-              className="h-full rounded-full bg-saffron-500"
-              style={{ width: `${progress * 100}%` }}
-            />
+          {FILM_HAS_AUDIO && (
+            <ControlButton
+              onClick={() => {
+                const el = ref.current;
+                if (!el) return;
+                el.muted = !el.muted;
+                setMuted(el.muted);
+              }}
+              label={muted ? t("film.unmute") : t("film.mute")}
+            >
+              {muted ? <VolumeX size={14} /> : <Volume2 size={14} />}
+            </ControlButton>
+          )}
+
+          <div className="flex min-w-[140px] flex-1 items-center gap-3">
+            <div className="h-1 flex-1 overflow-hidden rounded-full bg-ivory-100/12">
+              <div
+                className="h-full rounded-full bg-saffron-500 transition-[width] duration-100 ease-linear"
+                style={{ width: `${progress * 100}%` }}
+              />
+            </div>
+            <span className="font-mono text-[11px] tabular text-ivory-200/50">
+              {formatClock(time)} / {formatClock(duration)}
+            </span>
           </div>
         </>
       }
+      chapters={<Chapters active={scene} onSelect={jumpTo} />}
     >
       <video
         ref={ref}
@@ -328,12 +390,12 @@ function VideoPlayer() {
         preload="metadata"
         playsInline
         muted={muted}
+        onLoadedMetadata={(e) => setDuration(e.currentTarget.duration || 0)}
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
-        onTimeUpdate={(e) => {
-          const el = e.currentTarget;
-          setProgress(el.duration ? el.currentTime / el.duration : 0);
-        }}
+        onEnded={() => setPlaying(false)}
+        onSeeked={(e) => setTime(e.currentTarget.currentTime)}
+        onTimeUpdate={(e) => setTime(e.currentTarget.currentTime)}
       />
     </PlayerFrame>
   );
@@ -360,6 +422,29 @@ function PosterOverlay({ onPlay, label }: { onPlay: () => void; label: string })
         {t("film.eyebrow")}
       </span>
     </button>
+  );
+}
+
+/**
+ * Scene marker for video mode. The produced film burns its own subtitles into
+ * the lower edge of the frame, so the storyboard's bottom caption block would
+ * sit on top of them — this stays in the corner and only names the scene.
+ */
+function SceneBadge({ sceneIndex }: { sceneIndex: number }) {
+  const { t } = useI18n();
+  const scene = SCENES[sceneIndex];
+  return (
+    <div className="pointer-events-none absolute top-0 left-0 p-4 sm:p-5">
+      <span
+        key={sceneIndex}
+        className="kq-swap inline-flex items-center gap-2 rounded-full bg-ink-950/70 px-3 py-1.5 font-mono text-[10px] tracking-[0.16em] text-ivory-100/90 uppercase backdrop-blur-sm"
+      >
+        <span className="text-saffron-400">
+          {String(sceneIndex + 1).padStart(2, "0")}
+        </span>
+        {t(scene.title)}
+      </span>
+    </div>
   );
 }
 
