@@ -4,7 +4,7 @@ import { BookingDemo } from "@/components/prototype/BookingDemo";
 import { PaymentDemo } from "@/components/prototype/PaymentDemo";
 import { PhonePreview } from "@/components/prototype/PhonePreview";
 import { ProcurementDemo } from "@/components/prototype/ProcurementDemo";
-import { DemoTag, Eyebrow, Reveal } from "@/components/ui/primitives";
+import { Eyebrow, Reveal } from "@/components/ui/primitives";
 import { REGIONS } from "@/data/india";
 import { useI18n } from "@/i18n";
 import type { DictKey } from "@/i18n/en";
@@ -68,32 +68,18 @@ export function PrototypeLab() {
         className="furrows-dense pointer-events-none absolute inset-0 text-ink-900 opacity-50"
       />
       <div className="relative mx-auto w-full max-w-[1180px] px-5 py-20 sm:px-8 md:py-28">
-        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-          <div className="max-w-[38rem]">
-            <Reveal>
-              <Eyebrow>{t("tag.prototype")}</Eyebrow>
-            </Reveal>
-            <Reveal delay={0.05}>
-              <h2 className="mt-5 text-[clamp(1.9rem,4.6vw,3.1rem)] font-semibold">
-                {tl({
-                  en: "Use the prototype the way a farmer would.",
-                  hi: "प्रोटोटाइप को वैसे ही चलाएँ जैसे एक किसान चलाएगा।",
-                  te: "ఒక రైతు ఎలా వాడతారో అలాగే ప్రోటోటైప్‌ను వాడి చూడండి.",
-                })}
-              </h2>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <p className="mt-5 max-w-[56ch] text-[15px] leading-relaxed text-ink-700/80">
-                {tl({
-                  en: "Book a slot, carry the token into the app, follow the lot through procurement and watch the payment land. Each panel writes to the same record, so a change in one shows up in the others.",
-                  hi: "स्लॉट बुक करें, टोकन ऐप में ले जाएँ, लॉट को खरीद प्रक्रिया में देखें और भुगतान आते हुए देखें। हर पैनल एक ही रिकॉर्ड में लिखता है, इसलिए एक जगह किया बदलाव बाकी जगह दिखता है।",
-                  te: "స్లాట్ బుక్ చేయండి, టోకెన్‌ను యాప్‌లోకి తీసుకెళ్లండి, లాట్‌ను సేకరణ ప్రక్రియలో అనుసరించండి, చెల్లింపు రావడం చూడండి. ప్రతి ప్యానెల్ ఒకే రికార్డులో రాస్తుంది — కాబట్టి ఒకచోట చేసిన మార్పు మిగతా చోట్ల కనిపిస్తుంది.",
-                })}
-              </p>
-            </Reveal>
-          </div>
-          <Reveal delay={0.15}>
-            <DemoTag label={t("tag.prototype")} />
+        <div className="max-w-[38rem]">
+          <Reveal>
+            <Eyebrow>{t("tag.prototype")}</Eyebrow>
+          </Reveal>
+          <Reveal delay={0.05}>
+            <h2 className="mt-5 text-[clamp(1.9rem,4.6vw,3.1rem)] font-semibold">
+              {tl({
+                en: "Use the prototype the way a farmer would.",
+                hi: "प्रोटोटाइप को वैसे ही चलाएँ जैसे एक किसान चलाएगा।",
+                te: "ఒక రైతు ఎలా వాడతారో అలాగే ప్రోటోటైప్‌ను వాడి చూడండి.",
+              })}
+            </h2>
           </Reveal>
         </div>
 
