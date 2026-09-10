@@ -213,4 +213,16 @@ point them at `npm run build` with an output directory of `dist`.
 
 ---
 
+## Team
+
+Built for Smart India Hackathon 2026 by:
+
+- [@pupalavamsi603-star](https://github.com/pupalavamsi603-star)
+- [@MKYashwanthKumar](https://github.com/MKYashwanthKumar)
+- [@Keerthi-1210](https://github.com/Keerthi-1210)
+- [@petareshma29](https://github.com/petareshma29)
+- [@Deshik7-art](https://github.com/Deshik7-art)
+
+---
+
 Built for demonstration and evaluation purposes.
